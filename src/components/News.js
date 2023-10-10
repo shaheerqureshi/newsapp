@@ -116,23 +116,30 @@ export class News extends Component {
         loading: false
     }
   }
+  async componentDidMount(){
+    let url = "https://newsapi.org/v2/top-headlines?country=us &category=business&apiKey=cf14b702fcc54cebad78c578c6dc8209";
+    let data = await fetch(url);
+    let parsedData = await data.json();
+    console.log(parsedData);
+    this.setState({articles: parsedData.articles})
+  }
+  
+  
   render() {
+    console.log('render')
+    
     return (
+      
       <div className='container my-3'>
         <h2>CanNews - Top Headlines</h2>
         <div className="row">
-          <div className="col-md-4">
-             <NewsItem title="This is a title" description="Here is the description of the news" 
-             imageUrl="https://a3.espncdn.com/combiner/i?img=%2Fphoto%2F2023%2F0518%2Fr1174923_1296x729_16%2D9.jpg" newsUrl="TODO"/>
-          </div>
-          <div className="col-md-4">
-             <NewsItem title="This is a title" description="Here is the description of the news"/>
-          </div>
-          <div className="col-md-4">
-             <NewsItem title="This is a title" description="Here is the description of the news"/>
-          </div>
+        {this.state.articles.map(element=>{
+              return <div className="col-md-4" key={element.url}>
+                      <NewsItem title={element.title?element.title.slice(0,44):""} description={element.description?element.description.slice(0,88):""} 
+                      imageUrl={element.urlToImage} newsUrl={element.url} />
+           </div>
+        })}
         </div>
-        
       </div>
     )
   }

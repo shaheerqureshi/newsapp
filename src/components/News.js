@@ -32,7 +32,7 @@ export class News extends Component {
 
   }
   handleNextClick = async () =>{
-    if (!this.state.page + 1 > Math.ceil(this.state.totalResults/20)) {
+    if (!(this.state.page + 1 > Math.ceil(this.state.totalResults/20))) {
       let url = `https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=cf14b702fcc54cebad78c578c6dc8209&page=${this.state.page + 1}&pageSize=${this.props.pageSize}`;
       this.setState({loading:true})
       let data = await fetch(url);
@@ -55,7 +55,7 @@ export class News extends Component {
         {this.state.loading && <Spinner/>}
         <h1 className="text-center">CanNews - Top Headlines</h1>
         <div className="row">
-        {this.state.articles.map(element=>{
+        {!this.state.loading && this.state.articles.map(element=>{
               return <div className="col-md-4" key={element.url}>
                       <NewsItem title={element.title?element.title.slice(0,44):""} description={element.description?element.description.slice(0,88):""} 
                       imageUrl={!element.urlToImage?"http://cleantechnica.com/files/2023/10/IMG_9714-scaled.jpeg":element.urlToImage} newsUrl={element.url} />
